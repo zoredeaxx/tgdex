@@ -15,7 +15,8 @@ log = logging.getLogger(__name__)
 CONFIG_FILE_URL = os.environ.get('CONFIG_FILE_URL', None)
 
 if CONFIG_FILE_URL:
-    os.remove('.env')
+    if os.path.exists('.env'):
+        os.remove('.env')
     wget.download(CONFIG_FILE_URL, out='.env')
     print('\n')
     load_dotenv()
