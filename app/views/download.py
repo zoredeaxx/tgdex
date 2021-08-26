@@ -48,51 +48,51 @@ class Download:
 
         try:
             request = req
-            range_header = request.headers.get('Range', 0)
+            range_header = request.headers.get("Range", 0)
             if range_header:
-              range_data = range_header.replace('bytes=', '').split('-')
-              from_bytes = int(range_data[0])
-              until_bytes = int(range_data[1]) if range_data[1] else file_size - 1
+                range_data = range_header.replace("bytes=", "").split("-")
+                from_bytes = int(range_data[0])
+                until_bytes = int(range_data[1]) if range_data[1] else file_size - 1
             else:
-              from_bytes = request.http_range.start or 0
-              until_bytes = request.http_range.stop or file_size - 1
+                from_bytes = request.http_range.start or 0
+                until_bytes = request.http_range.stop or file_size - 1
 
             # req_length = until_bytes - from_bytes
             # offset = req.http_range.start or 0
             # limit = req.http_range.stop or size
             offset = from_bytes or 0
-            limit = until_bytes or size            
+            limit = until_bytes or size
             if (limit > size) or (offset < 0) or (limit < offset):
                 raise ValueError("range not in acceptable format")
         except ValueError:
             return web.Response(
                 status=416,
                 text="416: Range Not Satisfiable",
-                headers = {
-                    "Content-Range": f"bytes */{size}"
-                }
+                headers={"Content-Range": f"bytes */{size}"},
             )
 
         if not head:
             body = self.client.download(media, size, offset, limit)
-            log.info(f"Serving file in {message.id} (chat {chat_id}) ; Range: {offset} - {limit}")
+            log.info(
+                f"Serving file in {message.id} (chat {chat_id}) ; Range: {offset} - {limit}"
+            )
         else:
             body = None
-        
+
         return_resp = web.Response(
-        status=206 if req.http_range.start else 200,
-        body=body,
-        headers={
-            "Access-Control-Allow-Origin": "*",
-            # "Connection":"keep-alive",
-            "Content-Type": mime_type,
-            "Content-Range": f"bytes {offset}-{limit}/{size}",
-            "Content-Disposition": f'attachment; filename="{file_name}"',
-            # "Accept-Ranges": "bytes",
-            # "Transfer-Encoding":"chunked",
-            "Accept-Ranges": "bytes",
-            # "Content-Length": f"{limit-offset}"
-           }
+            status=206 if req.http_range.start else 200,
+            body=body,
+            headers={
+                "Access-Control-Allow-Origin": "*",
+                # "Connection":"keep-alive",
+                "Content-Type": mime_type,
+                "Content-Range": f"bytes {offset}-{limit}/{size}",
+                "Content-Disposition": f'attachment; filename="{file_name}"',
+                # "Accept-Ranges": "bytes",
+                # "Transfer-Encoding":"chunked",
+                "Accept-Ranges": "bytes",
+                # "Content-Length": f"{limit-offset}"
+            },
         )
 
         # r=  web.Response(
@@ -100,11 +100,11 @@ class Download:
         #     body=body,
         #     headers=headers
         # )
-        
+
         # r.enable_chunked_encoding()
         # return r
 
         if return_resp.status == 200:
-          return_resp.headers.add("Content-Length", str(size))
+            return_resp.headers.add("Content-Length", str(size))
 
         return return_resp

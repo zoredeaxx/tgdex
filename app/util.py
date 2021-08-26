@@ -1,5 +1,6 @@
 from urllib.parse import quote
 
+
 def get_file_name(message, quote_name=True):
     if message.file.name:
         name = message.file.name
@@ -7,6 +8,7 @@ def get_file_name(message, quote_name=True):
         ext = message.file.ext or ""
         name = f"{message.date.strftime('%Y-%m-%d_%H:%M:%S')}{ext}"
     return quote(name) if quote_name else name
+
 
 def get_human_size(num):
     base = 1024.0
