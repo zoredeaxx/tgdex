@@ -5,6 +5,7 @@ import os
 
 os.system("alias python3=python")
 
+
 def runSetup():
     def alert(missing):
         print(
@@ -18,13 +19,16 @@ def runSetup():
         if env_value is None:
             alert(env_var)
             return
-            
+
     if os.getenv("SESSION_STRING") is None:
         os.system("python app/generate_session_string.py")
-        print("\nCopy your SESSION_STRING from above and save it into Secrets (Environment variables) Sidebar!")
+        print(
+            "\nCopy your SESSION_STRING from above and save it into Secrets (Environment variables) Sidebar!"
+        )
         return
 
     os.system("python -m app")
+
 
 if __name__ == "__main__":
     runSetup()
