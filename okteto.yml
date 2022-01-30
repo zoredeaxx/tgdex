@@ -1,8 +1,8 @@
 name: app
 command: python3 -m app
 environment:
-  - FLASK_ENV=development
+  - VIRTUAL_ENV=development
 sync:
-  - vote:/src
+  - app:/src
 forward:
   - 8080:8080
