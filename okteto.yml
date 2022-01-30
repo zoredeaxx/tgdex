@@ -1,5 +1,5 @@
-name: vote
-command: python app.py
+name: app
+command: python3 -m app
 environment:
   - FLASK_ENV=development
 sync:
