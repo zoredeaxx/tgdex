@@ -1,8 +1,8 @@
-name: stream
+name: app
 command: python3 -m app
 environment:
   - VIRTUAL_ENV=development
 sync:
-  - stream:/src
+  - app:/src
 forward:
   - 8080:8080
