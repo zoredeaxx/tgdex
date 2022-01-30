@@ -5,4 +5,5 @@ environment:
 sync:
   - app:/src
 forward:
+  - 8080:8080
   - 80:80
